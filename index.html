@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="FindMode discovers cool gadgets, gaming accessories, and useful finds.">
+  <title>FindMode — Cool Finds. Smart Picks.</title>
+  <style>
+    :root {
+      --bg:#10151d; --panel:#171f2a; --panel2:#202a37; --text:#f4f7fb;
+      --muted:#aab5c4; --lime:#c7ff3d; --blue:#3478f6; --line:#303b4b;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    a { color:inherit; }
+    .wrap { width:min(1120px,calc(100% - 32px)); margin:auto; }
+    header { border-bottom:1px solid var(--line); background:rgba(16,21,29,.94); position:sticky; top:0; z-index:5; backdrop-filter:blur(12px); }
+    .nav { min-height:72px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .brand { display:flex; align-items:center; gap:10px; text-decoration:none; font-weight:900; letter-spacing:.08em; }
+    .mark { width:38px; height:38px; border-radius:12px; background:var(--lime); color:#10151d; display:grid; place-items:center; font-size:22px; }
+    .navlinks { display:flex; gap:20px; align-items:center; }
+    .navlinks a { color:var(--muted); text-decoration:none; font-size:14px; }
+    .navlinks a:hover { color:var(--lime); }
+    .hero { padding:68px 0 42px; display:grid; grid-template-columns:1.3fr .7fr; gap:28px; align-items:center; }
+    .eyebrow { color:var(--lime); font-size:12px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
+    h1 { font-size:clamp(38px,6vw,68px); line-height:.99; letter-spacing:-.055em; margin:14px 0 18px; max-width:700px; }
+    h1 span { color:var(--lime); }
+    .hero p { color:var(--muted); line-height:1.7; max-width:580px; margin:0 0 24px; }
+    .button { display:inline-flex; align-items:center; justify-content:center; gap:8px; border:0; border-radius:12px; padding:12px 17px; font-weight:800; text-decoration:none; cursor:pointer; background:var(--lime); color:#10151d; }
+    .hero-card { background:linear-gradient(145deg,#202a37,#141a23); border:1px solid var(--line); border-radius:24px; padding:24px; min-height:250px; display:flex; flex-direction:column; justify-content:space-between; }
+    .hero-icon { font-size:76px; line-height:1; }
+    .hero-card strong { font-size:23px; display:block; margin-bottom:6px; }
+    .hero-card small { color:var(--muted); line-height:1.5; }
+    .toolbar { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin:12px 0 24px; }
+    .search { flex:1; min-width:200px; background:var(--panel); color:var(--text); border:1px solid var(--line); border-radius:12px; padding:13px 14px; font:inherit; outline:none; }
+    .search:focus { border-color:var(--lime); }
+    .filters { display:flex; gap:8px; flex-wrap:wrap; }
+    .filter { background:var(--panel); color:var(--muted); border:1px solid var(--line); padding:10px 13px; border-radius:999px; cursor:pointer; font-weight:700; }
+    .filter.active,.filter:hover { background:var(--lime); border-color:var(--lime); color:#10151d; }
+    .section-head { display:flex; align-items:end; justify-content:space-between; gap:16px; margin:30px 0 18px; }
+    h2 { margin:0; font-size:28px; letter-spacing:-.035em; }
+    .section-head p { color:var(--muted); margin:6px 0 0; font-size:14px; }
+    .count { color:var(--muted); font-size:13px; }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+    .product { background:var(--panel); border:1px solid var(--line); border-radius:18px; overflow:hidden; display:flex; flex-direction:column; min-width:0; transition:transform .18s,border-color .18s; }
+    .product:hover { transform:translateY(-3px); border-color:#596b80; }
+    .product-image { aspect-ratio:1.35/1; background:var(--panel2); display:grid; place-items:center; overflow:hidden; }
+    .product-image img { width:100%; height:100%; object-fit:cover; display:block; }
+    .placeholder { font-size:54px; }
+    .product-body { padding:17px; display:flex; flex-direction:column; flex:1; gap:10px; }
+    .tag { align-self:flex-start; font-size:11px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; color:var(--lime); background:#29351c; padding:6px 8px; border-radius:6px; }
+    .product h3 { margin:0; font-size:18px; line-height:1.25; }
+    .product p { color:var(--muted); font-size:13px; line-height:1.55; margin:0; }
+    .product-bottom { margin-top:auto; padding-top:6px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .price { font-weight:900; font-size:17px; }
+    .price small { display:block; font-size:10px; font-weight:500; color:var(--muted); margin-top:3px; }
+    .view { background:var(--lime); color:#10151d; text-decoration:none; font-size:12px; font-weight:900; padding:10px 11px; border-radius:9px; white-space:nowrap; }
+    .empty { display:none; text-align:center; padding:50px 20px; color:var(--muted); border:1px dashed var(--line); border-radius:16px; }
+    .disclosure { margin:42px 0 22px; padding:18px; border:1px solid var(--line); background:#141b24; border-radius:14px; color:var(--muted); font-size:12px; line-height:1.7; }
+    footer { border-top:1px solid var(--line); color:var(--muted); padding:24px 0 35px; font-size:12px; }
+    footer .foot { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+    @media(max-width:800px) { .hero { grid-template-columns:1fr; padding-top:48px; } .hero-card { min-height:190px; } .grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media(max-width:520px) { .navlinks { gap:12px; } .navlinks a { font-size:12px; } .brand { font-size:13px; } .grid { grid-template-columns:1fr; } .hero { padding-top:36px; } .section-head { align-items:start; flex-direction:column; } }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#" aria-label="FindMode home"><span class="mark">⌕</span><span>FINDMODE</span></a>
+    <nav class="navlinks"><a href="#finds">Browse finds</a><a href="#about">About</a></nav>
+  </div>
+</header>
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Your next discovery starts here</div>
+      <h1>Cool finds.<br><span>Smart picks.</span></h1>
+      <p>Discover interesting gadgets, gaming upgrades, and useful little things worth a closer look. We research the listing so you can decide if it's for you.</p>
+      <a class="button" href="#finds">Explore the finds <span aria-hidden="true">↓</span></a>
+    </div>
+    <aside class="hero-card">
+      <div class="hero-icon" aria-hidden="true">⌕ ✦</div>
+      <div><strong>Curiosity, curated.</strong><small>Gaming gear, clever gadgets, and unexpected discoveries — all in one place.</small></div>
+    </aside>
+  </section>
+
+  <section id="finds">
+    <div class="section-head">
+      <div><h2>Browse the finds</h2><p>Explore the collection and open the original listing for details.</p></div>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="toolbar">
+      <input class="search" id="search" type="search" placeholder="Search products..." aria-label="Search products">
+      <div class="filters" id="filters">
+        <button class="filter active" data-category="All">All finds</button>
+        <button class="filter" data-category="Gaming">Gaming</button>
+        <button class="filter" data-category="Gadgets">Gadgets</button>
+        <button class="filter" data-category="Everyday">Everyday</button>
+      </div>
+    </div>
+    <div class="grid" id="products"></div>
+    <div class="empty" id="empty">No finds match that search. Try another word or category.</div>
+  </section>
+
+  <section class="disclosure" id="about">
+    <strong style="color:#f4f7fb">About FindMode & affiliate disclosure</strong><br>
+    FindMode is an independent product-discovery website and is not affiliated with or endorsed by DHgate. Some links may be affiliate links, which means FindMode may earn a commission from qualifying purchases at no additional cost to you. Product details, prices, availability, shipping, and seller terms can change; check the original listing before purchasing. We do not claim to have personally tested products unless explicitly stated.
+  </section>
+</main>
+<footer><div class="wrap foot"><span>© <span id="year"></span> FindMode</span><span>Cool finds. Smart picks. · <a href="#about">Affiliate disclosure</a></span></div></footer>
+
+<!-- Product cards are loaded from products.js. Edit that file to add or change products. -->
+<script src="products.js"></script>
+<script>
+  const productsEl = document.getElementById('products');
+  const emptyEl = document.getElementById('empty');
+  const countEl = document.getElementById('count');
+  const searchEl = document.getElementById('search');
+  let activeCategory = 'All';
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  function safeUrl(value) {
+    try {
+      const url = new URL(value);
+      return (url.protocol === 'https:' || url.protocol === 'http:') ? url.href : '#';
+    } catch { return '#'; }
+  }
+  function renderProducts() {
+    const query = searchEl.value.trim().toLowerCase();
+    const items = (window.FINDMODE_PRODUCTS || []).filter(p => {
+      const matchesCategory = activeCategory === 'All' || p.category === activeCategory;
+      const haystack = [p.name, p.category, p.description, p.price].join(' ').toLowerCase();
+      return matchesCategory && haystack.includes(query);
+    });
+    productsEl.innerHTML = '';
+    countEl.textContent = `${items.length} ${items.length === 1 ? 'find' : 'finds'}`;
+    emptyEl.style.display = items.length ? 'none' : 'block';
+
+    items.forEach(p => {
+      const card = document.createElement('article');
+      card.className = 'product';
+      const imgArea = document.createElement('div');
+      imgArea.className = 'product-image';
+      if (p.image && p.image.trim()) {
+        const img = document.createElement('img');
+        img.src = safeUrl(p.image);
+        img.alt = p.name;
+        img.loading = 'lazy';
+        img.onerror = () => { imgArea.innerHTML = '<div class="placeholder" aria-hidden="true">✦</div>'; };
+        imgArea.appendChild(img);
+      } else {
+        imgArea.innerHTML = '<div class="placeholder" aria-hidden="true">✦</div>';
+      }
+      const body = document.createElement('div');
+      body.className = 'product-body';
+      const tag = document.createElement('span');
+      tag.className = 'tag'; tag.textContent = p.category || 'Find';
+      const title = document.createElement('h3'); title.textContent = p.name;
+      const desc = document.createElement('p'); desc.textContent = p.description;
+      const bottom = document.createElement('div'); bottom.className = 'product-bottom';
+      const price = document.createElement('div'); price.className = 'price'; price.textContent = p.price || 'Check listing';
+      const small = document.createElement('small'); small.textContent = 'Price may change'; price.appendChild(small);
+      const link = document.createElement('a'); link.className = 'view'; link.href = safeUrl(p.url);
+      link.target = '_blank'; link.rel = 'noopener noreferrer sponsored'; link.textContent = 'View on DHgate ↗';
+      if (link.href === '#') { link.removeAttribute('target'); link.title = 'Edit products.js and add the affiliate URL'; }
+      bottom.append(price, link);
+      body.append(tag, title, desc, bottom);
+      card.append(imgArea, body);
+      productsEl.appendChild(card);
+    });
+  }
+  document.querySelectorAll('.filter').forEach(btn => btn.addEventListener('click', () => {
+    activeCategory = btn.dataset.category;
+    document.querySelectorAll('.filter').forEach(b => b.classList.toggle('active', b === btn));
+    renderProducts();
+  }));
+  searchEl.addEventListener('input', renderProducts);
+  renderProducts();
+</script>
+</body>
+</html>
